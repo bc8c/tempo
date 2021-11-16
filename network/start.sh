@@ -7,29 +7,6 @@
 # Exit on first error, print all commands.
 set -ev
 
-function replacePrivateKey() {
-    echo "ca key file exchange"
-    cp docker-compose-template.yml docker-compose.yml
-    PRIV_KEY=$(ls crypto-config/peerOrganizations/org1.example.com/ca/ | grep _sk)
-    sed -i "s/CA_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose.yml
-}
-
-function checkPrereqs() {
-    # check config dir
-    if [ ! -d "crypto-config" ]; then
-        echo "crypto-config dir missing"
-        exit 1
-    fi
-    # check crypto-config dir
-     if [ ! -d "config" ]; then
-        echo "config dir missing"
-        exit 1
-    fi
-}
-
-checkPrereqs
-replacePrivateKey
-
 docker-compose -f docker-compose.yml down
 
 replacePrivateKey
